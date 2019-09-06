@@ -1,0 +1,278 @@
+.hidden {
+    display: none;
+}
+.hosCopyButton {
+	border-radius: 0.4em;
+    margin: 4px 0;
+    padding: 0.5em 2%;
+    width: 94%;
+	float: left;
+}
+
+.hosHelp {
+	padding-left: 6px;
+	text-align: center;
+	line-height: 32px;
+}
+
+.hosHelpBtn {
+	margin-top: 17px;
+	float: left;
+}
+
+.hosToolTip {
+	border-radius: 3px;
+	background-color: #e8f3fd;
+	border: 1px solid #c5dbec;
+	width: 30px;
+	height: 30px;
+	color: #25477b;
+	cursor: pointer;
+}
+
+.hosIcon {
+	width: 12px;
+	height: 12px;
+}
+
+.hosBtn {
+	border-radius: 3px;
+	border: 1px solid #c5dbec;
+	background-color: #e8f3fd;
+	color: #25477b;
+	fill: #25477b;
+	cursor: pointer;
+}
+
+.hosBtn:hover {
+    border-color: #5293c6;
+	background: #d1e7fb;
+	color: #25477b;
+}
+
+.hosBtn:active {
+	color: #ffffff;
+	fill: #ffffff;
+	border-color: #2c7ab1;
+	background: #2c7ab1;
+}
+
+.hosCopyField {
+	width: 94%;
+	margin: 4px 0;
+	padding: 0.5em 2%;
+	background-clip: content-box;
+	float: left;
+}
+
+#hosErrorText {
+	color: #cd0a0a;
+}
+
+#copyProgress {
+	background-color: #ddd;
+}
+
+#copyBar {
+	width: 0%;
+	background-color: #2c7ab1;
+	text-align: center;
+	color: white;
+}
+
+#hosCopyNext {
+	float: right;
+}
+
+#hosCopyRestart {
+	float: right;
+}
+
+#primaryPage { 
+	max-width: 800px;
+	border-color: #c5dbec;
+}
+
+#hosCopyDisclaimer { 
+	color: red;
+}
+
+/* Skin for Simple Dialog Box Plugin */
+.dialog-box-hos {
+  width:300px;
+  height:150px;
+  background-color:white;
+  border:1px solid #ccc;
+  border-radius: 3px;
+  -webkit-box-shadow:0 1px 5px rgba(0,0,0,.2);
+  -mz-box-shadow:0 1px 5px rgba(0,0,0,.2);
+  box-shadow:0 1px 5px rgba(0,0,0,.2);
+  position:absolute;
+  width:200px;
+  height:100px;
+  margin-top:-51px;
+  margin-left:-101px;
+  z-index:9999;
+  color:#222;
+  visibility:hidden;
+  opacity:0;
+}
+.dialog-box-hos .dialog-title {
+  margin:0;
+  padding:0;
+  font:inherit;
+  color:#25477b;
+  font-weight:bold;
+  height:2em;
+  line-height:2em;
+  overflow:hidden;
+  padding:0 .8em;
+  background-color:#FFFFFF;
+  cursor:move;
+}
+.dialog-box-hos .dialog-content {
+  border-top:1px solid #ccc;
+  padding:1em;
+  position:absolute;
+  top:2em;
+  right:0;
+  bottom:3em;
+  left:0;
+  overflow:auto;
+}
+.dialog-box-hos .dialog-content iframe {
+  display:block;
+  border:none;
+  background:none;
+  margin:0;
+  padding:0;
+  overflow:auto;
+  width:100%;
+  height:100%;
+}
+.dialog-box-hos .dialog-content::-webkit-scrollbar {
+  width:8px;
+  height:8px;
+  background-color:#f5f5f5;
+  border-left:1px solid #ccc;
+}
+.dialog-box-hos .dialog-content::-webkit-scrollbar-thumb {
+  background-color:#666;
+  border:none;
+}
+.dialog-box-hos .dialog-content::-webkit-scrollbar-thumb:hover {background-color:#555}
+.dialog-box-hos .dialog-content::-webkit-scrollbar-thumb:active {background-color:#444}
+.dialog-box-hos .dialog-action {
+  position:absolute;
+  right:0;
+  bottom:0;
+  left:0;
+  height:2em;
+  padding:.5em;
+  background-color:#FFFFFF;
+  border-top:1px solid #ccc;
+  text-align:right;
+}
+.dialog-box-hos .dialog-action .btn, .btn {
+  text-decoration:none;
+  border:none;
+  outline:none;
+  color: #25477b;
+  font-weight:bold;
+  background-color:#e8f3fd;
+  border:1px solid #c5dbec;
+  -webkit-border-radius:.2em;
+  -moz-border-radius:.2em;
+  border-radius: 3px;
+  padding:.4em 1em;
+  margin-left:.2em;
+  line-height:2em;
+  cursor:pointer;
+}
+.dialog-box-hos .dialog-close,
+.dialog-box-hos .dialog-minmax {
+  border:none;
+  outline:none;
+  background:none;
+  font:inherit;
+  font-family:Arial,Sans-Serif;
+  font-style:normal;
+  font-weight:bold;
+  font-size:150%;
+  line-height:1.4em;
+  color:#aaa;
+  text-decoration:none;
+  position:absolute;
+  top:0;
+  right:.3em;
+  text-align:center;
+  cursor:pointer;
+}
+.dialog-box-hos .dialog-minmax {right:1.5em}
+.dialog-box-hos .dialog-close:focus,
+.dialog-box-hos .dialog-minmax:focus,
+.dialog-box-hos .dialog-action .btn:focus {
+  border-width:0;
+  outline:none;
+}
+.dialog-box-hos .dialog-close:hover,
+.dialog-box-hos .dialog-minmax:hover {color:#777}
+.dialog-box-hos .dialog-close:focus,
+.dialog-box-hos .dialog-minmax:focus {color:#C90000}
+.dialog-box-hos .dialog-close:active,
+.dialog-box-hos .dialog-minmax:active {color:#444}
+.dialog-box-hos .dialog-action .btn:hover, .btn:hover {
+	border-color:#5293c6;
+	background: #d1e7fb;
+}
+.dialog-box-hos .dialog-action .btn:focus {
+  border-color:#2c7ab1;
+  border-width:1px;
+}
+.dialog-box-hos .dialog-action .btn:active, .btn:active {
+  color: #fff;
+  border-color:#2c7ab1;
+  background-color:#2c7ab1;
+}
+.dialog-box-hos + .dialog-box-hos-overlay {
+  background-color:black;
+  opacity:.2;
+  filter:alpha(opacity=20);
+  position:fixed !important;
+  position:absolute;
+  top:0;
+  right:0;
+  bottom:0;
+  left:0;
+  z-index:9997;
+  display:none;
+}
+.dialog-box-hos.fixed-dialog-box-hos {
+  position:fixed !important;
+  position:absolute;
+}
+.dialog-box-hos.minimize {
+  width:2em !important;
+  height:2em !important;
+  overflow:hidden !important;
+  margin-top:0 !important;
+  margin-left:0 !important;
+  top:-1px !important;
+  left:1em !important;
+}
+.dialog-box-hos.minimize .dialog-title {
+  color:transparent;
+  text-shadow:none;
+  text-indent:-9999px;
+}
+.dialog-box-hos.minimize .dialog-minmax {
+  right:0;
+  left:0;
+}
+.dialog-box-hos.minimize .dialog-close,
+.dialog-box-hos.minimize .dialog-content,
+.dialog-box-hos.minimize .dialog-action {
+  display:none;
+  visibility:hidden;
+}
+

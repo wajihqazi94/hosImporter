@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+	  <meta charset="utf-8">
+	  <meta http-equiv="x-ua-compatible" content="ie=edge">
+	  <meta name="description" content="">
+	  <meta name="viewport" content="width=device-width, initial-scale=1">
+	  <title>HOS Log Importer</title>
+
+	  
+	  <!-- build:css styles/vendor.css -->
+	  <!-- bower:css -->
+	  <!-- endbower -->
+	  <!-- endbuild -->
+
+	  <!-- build:css styles/main.css -->
+	  <link rel="stylesheet" href="styles/main.css">
+	  <!-- endbuild -->
+
+	  <!-- build:js scripts/vendor.js -->
+	  <script type="text/javascript" src="../bower_components/moment/moment.js"></script>
+	  <script type="text/javascript" src="../bower_components/moment/moment-timezone-with-data.js"></script>
+	  <!-- bower:js -->
+	  <!-- endbower -->
+	  <!-- endbuild -->
+
+	  <!-- build:js scripts/main.js -->
+	  <script src="scripts/main.js"></script>
+	  <!-- endbuild -->
+	  
+	</head>
+
+	<body>
+		<svg class="svgSprite" xmlns="http://www.w3.org/2000/svg">
+			<symbol viewBox="0 0 580 1000" id="question-mark"><path d="M494 110q86 62 86 184 0 64-42 124-12 20-88 80l-46 30q-40 34-48 60-6 16-8 44 0 14-16 14H204q-16 0-16-12 4-98 28-124 16-22 48-48t56-42l24-14q22-16 34-34 28-44 28-70 0-40-26-78-28-36-92-36-68 0-94 44-28 42-28 92H0Q6 162 114 92q70-42 166-42 130 0 214 60zM278 746q44 0 73 30t27 74q-2 46-32 73t-74 25q-44 0-73-29t-27-75 32-73 74-25z"></path></symbol>
+		</svg>
+	  <div id="hosLogImporter">
+		<header class="geotabPageHeader">
+			<h1 class="geotabPageName">HOS Log Importer</h1>
+			<div class="hosHelp" id="toolTipHelp">
+				<label class="hosHelpBtn hosToolTip hosBtn" id="hosHelpButton">
+				<svg class="hosIcon">
+					<use xlink:href="#question-mark"></use>
+				</svg>
+				</label>
+			</div>
+		 </header>		
+	  </div>
+	  
+	  <fieldset id="primaryPage">
+		<div class="checkmateField">
+			<div class="hosLogImporter-label">Drivers</div>
+			<div class="hosLogImporter-drivers">
+				<select id="hosDrivers" multiple data-placeholder="Select Drivers">
+				
+				</select>
+			</div>
+		</div>
+		<div class="checkmateField">
+			<label>Target Database</label>
+			<input type="text" id="targetDatabase" placeholder="Enter target database name">
+		</div> 
+		<div class="checkmateField">
+			<label>Password</label>
+			<input type="password" id="hosUserPassword">
+		</div>
+		<div class="checkmateField">
+			<label>Select From Date (UTC)</label>
+			<input type="datetime-local" id="fromDate">
+		</div>
+		<div class="hosCopyButton">
+			<label id="hosErrorText"></label>
+			<button type="button" class="hosBtn" id="hosCopyNext">Import Logs</button>
+			<button type="button" class="hosBtn" id="hosCopyRestart">Start Over</button>
+		</div>
+		<div class="hosCopyField" id="hosCopyProgressText">
+			<label id="hosCopyProgressLabel"></label>
+		</div>
+		<div class="hosCopyField" id="hosCopyProgressBar">
+			<div id="copyBar">0%</div>	
+		</div>
+		<div class="hosCopyField" id="hosCopyDisclaimer">
+			<p>Initiating an import multiple times for overlapping timeframes may duplicate the logs in the target database.</p>
+		</div>
+	  </fieldset>
+
+	</body>
+
+</html>

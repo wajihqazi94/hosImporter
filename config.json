@@ -1,0 +1,19 @@
+{
+  "name": "HOS Log Importer",
+  "supportEmail": "support@geotab.com",
+  "version": "0.0.1",
+  "items": [{
+    "url": "hosLogImporter.html",
+    "path": "ActivityLink/",
+    "menuName": {
+      "en": "HOS Log Importer"
+    },
+    "icon": "images/icon.svg"
+  }],
+  "dev": {
+    "root": "hosLogImporter",
+    "dist": {
+      "host": "https://www.example.com/myaddin/"
+    }
+  }
+}
