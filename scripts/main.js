@@ -433,13 +433,17 @@ geotab.addin.hosLogImporter = function(api, state) {
 								}
 							}
 						}					
-						
-						api.multiCall(annotationCalls, function(result) {
-							resolve(result);
-						}, function(error) {
-							errorHandler(error, "hosErrorText");
-							reject();
-						})
+						if (annotationCalls.length === 0) {
+							resolve();
+						} 
+						else {
+							api.multiCall(annotationCalls, function(result) {
+								resolve(result);
+							}, function(error) {
+								errorHandler(error, "hosErrorText");
+								reject();
+							})
+						}
 					})
 				},
 				hosGrabUserRuleSet = function(drivers, fromDate) {
