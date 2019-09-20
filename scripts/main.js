@@ -434,7 +434,7 @@ geotab.addin.hosLogImporter = function(api, state) {
 							}
 						}					
 						if (annotationCalls.length === 0) {
-							resolve();
+							resolve([]);
 						} 
 						else {
 							api.multiCall(annotationCalls, function(result) {
