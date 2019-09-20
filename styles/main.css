@@ -65,7 +65,8 @@
 	float: left;
 }
 
-#hosErrorText {
+#hosErrorText,
+#hosAccessError {
 	color: #cd0a0a;
 }
 
@@ -89,6 +90,12 @@
 }
 
 #primaryPage { 
+	max-width: 800px;
+	border-color: #c5dbec;
+}
+
+#noAccess { 
+	display: none;
 	max-width: 800px;
 	border-color: #c5dbec;
 }

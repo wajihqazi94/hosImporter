@@ -28,9 +28,6 @@
 	  <!-- build:js scripts/main.js -->
 	  <script src="scripts/main.js"></script>
 	  <!-- endbuild -->
-	  
-	  <script type="text/javascript" src="scripts/moment/moment.js"></script>
-	  <script type="text/javascript" src="scripts/moment/moment-timezone-with-data.js"></script>
 
 	  
 	</head>
@@ -62,6 +59,10 @@
 			</div>
 		</div>
 		<div class="checkmateField">
+			<label>Target Server</label>
+			<input type= "text" id="targetServer" placeholder="Enter target server (e.g. my.geotab.com)">
+		</div>
+		<div class="checkmateField">
 			<label>Target Database</label>
 			<input type="text" id="targetDatabase" placeholder="Enter target database name">
 		</div> 
@@ -86,6 +87,12 @@
 		</div>
 		<div class="hosCopyField" id="hosCopyDisclaimer">
 			<p>Initiating an import multiple times for overlapping timeframes may duplicate the logs in the target database.</p>
+		</div>
+	  </fieldset>
+	  
+	  <fieldset id="noAccess">
+		<div class="hosNoAccess"> 
+			<label id="hosAccessError"></label>
 		</div>
 	  </fieldset>
 

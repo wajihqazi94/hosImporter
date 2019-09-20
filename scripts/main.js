@@ -3,9 +3,10 @@
  */
 geotab.addin.hosLogImporter = function(api, state) {
     'use strict';
-    let container = document.getElementById('hosLogImporter'),
+    let container = document.getElementById("hosLogImporter"),
 		dateContainer = document.getElementById("fromDate"),
 		targetDatabase = document.getElementById("targetDatabase"),
+		targetServer = document.getElementById("targetServer"),
 		errorMessageTimer,
 		minDate,
 		deviceCache = {},
@@ -52,16 +53,16 @@ geotab.addin.hosLogImporter = function(api, state) {
 				currentDate = new Date().toISOString(),
 				drivers = getSelectedDrivers(),
 				userPassword = document.getElementById("hosUserPassword");
-			if (drivers.length == 0 || targetDatabase.value === '' || dateContainer.value === '') {
-				errorHandler("One or more field(s) are missing!");
+			if (drivers.length == 0 || targetServer.value === '' || targetDatabase.value === '' || dateContainer.value === '') {
+				errorHandler("One or more field(s) are missing!", "hosErrorText");
 			} else if (dateValue < minDate.toISOString() || dateValue > currentDate) {
-				errorHandler("The date specified is outside the allowable range of " + minDate.toISOString() + " and " + currentDate + "!");
+				errorHandler("The date specified is outside the allowable range of " + minDate.toISOString() + " and " + currentDate + "!", "hosErrorText");
 			} else if (drivers.length > 5) {
-				errorHandler("You can only import logs for a maximum of five drivers at once!");
+				errorHandler("You can only import logs for a maximum of five drivers at once!", "hosErrorText");
 			} else {
 				let fromDate = dateContainer.value,
 					hosSourceLogs = await utilities.hosCopyGrabHosLogs(drivers, dateValue),
-					targetSession = await utilities.hosCopyAuthenticate(htmlEscape(targetDatabase.value), userName, userPassword.value),
+					targetSession = await utilities.hosCopyAuthenticate(htmlEscape(targetDatabase.value), userName, userPassword.value).catch(function() {console.error("Insufficient priveleges.")}),
 					sourceAnnotations = await utilities.hosCopyGrabAnnotations(hosSourceLogs),
 					userRuleSets = await utilities.hosGrabUserRuleSet(drivers, dateValue);
 				if (!hosSourceLogs.every(isEmpty)) {
@@ -89,10 +90,10 @@ geotab.addin.hosLogImporter = function(api, state) {
 						restartButton.disabled = false;
 					}
 					else {
-						errorHandler("Invalid credentials!");
+						errorHandler("Invalid credentials!", "hosErrorText");
 					}
 				} else {
-					errorHandler("There are no logs to be imported.");
+					errorHandler("There are no logs to be imported.", "hosErrorText");
 				}	
 			}
 		},
@@ -135,15 +136,39 @@ geotab.addin.hosLogImporter = function(api, state) {
 				driverList.add(hosOption);
 			}
 		},
+		checkUserClearance = function() {
+			return new Promise(function(resolve, reject) {
+				api.getSession(function(credentials) {
+					resolve(grabUsers(credentials.userName));
+				});
+			});
+		},
+		grabUsers = function(name) {
+			return new Promise(function(resolve, reject) {
+				api.call("Get", {
+					typeName: "User",
+					search: {
+						"name": name
+					}
+				}, function(result) {
+					if (result[0].securityGroups[0].id === "GroupEverythingSecurityId") {
+						resolve(true);
+					} else {
+						resolve(false);
+					}
+				});
+			});
+		},
 		
-		errorHandler = function(msg) {
-			let alertError = document.getElementById("hosErrorText");
+		errorHandler = function(msg, elem, duration) {
+			let alertError = document.getElementById(elem);
+			duration = duration || 6000;
 			alertError.textContent = msg;
 			alertError.classList.remove("hidden");
 			clearTimeout(errorMessageTimer);
 			errorMessageTimer = setTimeout(function () {
 				alertError.classList.add("hidden");
-			}, 6000);
+			}, duration);
 		},
 		
 		isEmpty = function(logList) {
@@ -242,7 +267,7 @@ geotab.addin.hosLogImporter = function(api, state) {
 									let json = JSON.parse(request.responseText);
 									resolve(json);
 								} else {
-									errorHandler(JSON.parse(request.responseText));
+									errorHandler(JSON.parse(request.responseText), "hosErrorText");
 									reject();
 								}
 							}
@@ -261,15 +286,59 @@ geotab.addin.hosLogImporter = function(api, state) {
 									"userName": userName
 								}
 							}
-						request.open("POST", "https://mypreview.geotab.com/apiv1", true);
+						request.open("POST", "https://" + targetServer.value + "/apiv1", true);
+						request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+						request.onreadystatechange = async function() {
+							if (request.readyState === 4) {
+								if (request.status === 200) {
+									let json = JSON.parse(request.responseText);
+									if (json.result.path === "ThisServer") {
+										json.result.path = targetServer.value;
+									}
+									let clearance = await hosCopyCheckClearance(database, userName, json.result);
+									if (clearance[0].securityGroups[0].id === "GroupEverythingSecurityId") {
+										resolve(json.result);
+									}
+									else {
+										errorHandler("Your account in the target database must be an administrator to proceed with the import.", "hosErrorText");
+										resolve();
+									}
+									
+								} else {
+									errorHandler("Failed to authenticate. Please ensure you have entered the correct credentials and that you have access to this database.", "hosErrorText");
+									resolve();
+								}
+							}
+						}
+						request.send("JSON-RPC=" + encodeURIComponent(JSON.stringify(apiMethod)));
+					})
+				},
+				hosCopyCheckClearance = function(database, userName, credentials) {
+					return new Promise(function(resolve, reject) {
+						let request = new XMLHttpRequest(),
+							apiMethod = {
+								"method": "Get",
+								"params": {
+									"typeName": "User",
+									"search": {
+										"name": userName
+									},
+									"credentials": {
+										"userName": userName,
+										"database": database,
+										"sessionId": credentials.credentials.sessionId
+									}
+								}
+							}
+						request.open("POST", "https://" + credentials.path + "/apiv1", true);
 						request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 						request.onreadystatechange = function() {
 							if (request.readyState === 4) {
 								if (request.status === 200) {
 									let json = JSON.parse(request.responseText);
-									resolve(json.result);
+									resolve(json.result)
 								} else {
-									errorHandler("Failed to authenticate. Please ensure you have entered the correct credentials and that you have access to this database.");
+									errorHandler("Failed to authenticate. Please ensure you have entered the correct credentials and that you have access to this database.", "hosErrorText");
 									resolve();
 								}
 							}
@@ -296,7 +365,7 @@ geotab.addin.hosLogImporter = function(api, state) {
 						api.multiCall(trailerCalls, function(result) {
 							resolve(result);
 						}, function(error) {
-							errorHandler(error);
+							errorHandler(error, "hosErrorText");
 							reject();
 						});
 					});
@@ -339,7 +408,7 @@ geotab.addin.hosLogImporter = function(api, state) {
 						api.multiCall(hosLogCalls, function(result) {
 							resolve(result);
 						}, function(error) {
-							errorHandler(error);
+							errorHandler(error, "hosErrorText");
 							reject();
 						});
 					})
@@ -368,7 +437,7 @@ geotab.addin.hosLogImporter = function(api, state) {
 						api.multiCall(annotationCalls, function(result) {
 							resolve(result);
 						}, function(error) {
-							errorHandler(error);
+							errorHandler(error, "hosErrorText");
 							reject();
 						})
 					})
@@ -398,7 +467,7 @@ geotab.addin.hosLogImporter = function(api, state) {
 							}
 							resolve(temp);
 						}, function(error) {
-							errorHandler(error);
+							errorHandler(error, "hosErrorText");
 							reject();
 						})
 					})
@@ -644,11 +713,11 @@ geotab.addin.hosLogImporter = function(api, state) {
 									userString += rejectedUsers[i] + ", ";
 								}
 								userString = userString.slice(0, -2);
-								errorHandler("The following users: " + userString + " do not have matching assets in target database or do not have HOS logs!");
+								errorHandler("The following users: " + userString + " do not have matching assets in target database or do not have HOS logs!", "hosErrorText");
 							};
 							resolve();
 						} else {							
-							errorHandler("Selected users do not have matching assets in target database!");
+							errorHandler("Selected users do not have matching assets in target database!", "hosErrorText");
 							resolve();
 						}	
 					})
@@ -824,26 +893,35 @@ geotab.addin.hosLogImporter = function(api, state) {
 			api.getSession(function(session, server) {
 				userName = session.userName;
 			})
-			restartButton.style.display = "none";
-			nextButton.addEventListener("click", function() {
-				copyExecute(userName, nextButton, restartButton);
-			}, false);
-			restartButton.addEventListener("click", async function() {
-				restartButton.style.display = "none";
-				initialize(userName, nextButton);
+			
+			checkUserClearance().then(async function(approved) {
+				if (approved) {
+					restartButton.style.display = "none";
+					nextButton.addEventListener("click", function() {
+						copyExecute(userName, nextButton, restartButton);
+					}, false);
+					restartButton.addEventListener("click", async function() {
+						restartButton.style.display = "none";
+						initialize(userName, nextButton);
+					});
+					helpButton.addEventListener("click", function() {
+						setDialog("open", {
+							title: "Help",
+							content: "This add-in allows you to copy HOS logs for your drivers from one database to another. Please select the drivers whose logs you would like to transfer. Please specify the target database and enter your password. The date specified cannot be further back than seven days. A maximum of five driver logs can be transferred at a time. <br><br><b>The driver and associated assets must be present in the source and target databases.</b>",
+							buttons: {
+								"Close": function() {
+									setDialog('close');
+								}
+							}
+						})
+					}, false);
+					initialize(userName, nextButton);
+				} else { 
+					document.getElementById("primaryPage").style.display = "none";
+					document.getElementById("noAccess").style.display = "block";
+					errorHandler("Administrator Clearance is required to use this add-in.", "hosAccessError", 1000000);
+				}
 			});
-			helpButton.addEventListener("click", function() {
-				setDialog("open", {
-					title: "Help",
-					content: "This add-in allows you to copy HOS logs for your drivers from one database to another. Please select the drivers whose logs you would like to transfer. Please specify the target database and enter your password. The date specified cannot be further back than seven days. A maximum of five driver logs can be transferred at a time. <br><br><b>The driver and associated assets must be present in the source and target databases.</b>",
-					buttons: {
-						"Close": function() {
-							setDialog('close');
-						}
-					}
-				})
-			}, false);
-            initialize(userName, nextButton);
             // MUST call initializeCallback when done any setup
             initializeCallback();
         },
