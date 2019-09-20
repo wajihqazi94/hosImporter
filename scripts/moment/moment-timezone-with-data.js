@@ -15,7 +15,7 @@
 	} else {
 		factory(root.moment);                        // Browser
 	}
-}(this, function (moment) {
+}((window || module || {}), function(moment) {
 	"use strict";
 
 	// Do not load moment-timezone a second time.
