@@ -61,8 +61,21 @@
 	width: 94%;
 	margin: 4px 0;
 	padding: 0.5em 2%;
-	background-clip: content-box;
 	float: left;
+}
+
+#hosLogImporter {
+	margin: 1em;
+}
+
+#hosWarning {
+	width: 93%;
+	overflow: hidden;
+	background-color: #fffcdd;
+	border: 1px solid #ffeb94;
+	color: #926d00;
+	border-radius: 4px;
+	padding: 4px 12px 4px 12px;
 }
 
 #hosErrorText,
