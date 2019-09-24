@@ -69,7 +69,7 @@
 }
 
 #hosWarning {
-	width: 93%;
+	width: 92%;
 	overflow: hidden;
 	background-color: #fffcdd;
 	border: 1px solid #ffeb94;
@@ -107,6 +107,7 @@
 }
 
 #primaryPage { 
+	margin-left: 1em;
 	max-width: 800px;
 	border-color: #c5dbec;
 }
