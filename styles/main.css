@@ -78,6 +78,10 @@
 	padding: 4px 12px 4px 12px;
 }
 
+#hosDrivers {
+	width: 100%;
+}
+
 #hosErrorText,
 #hosAccessError {
 	color: #cd0a0a;
